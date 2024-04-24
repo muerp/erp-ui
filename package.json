@@ -1,0 +1,32 @@
+{
+  "name": "@muerp/ui",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist/erp-ui.js",
+  "type": "module",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --config vite-lib.config.ts && tsc --project tsconfig.lib.json",
+    "build:demo": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "element-plus": "^2.7.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.24.0",
+    "@types/node": "^20.12.7",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "path": "^0.12.7",
+    "sass": "^1.75.0",
+    "string-hash": "^1.1.3",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
+  }
+}

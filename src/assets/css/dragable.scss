@@ -1,0 +1,289 @@
+.drag-win-shadow {
+    position: fixed;
+    z-index: 12;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+}
+
+.drag-win {
+    position: relative;
+
+    .drag-inner {
+        width: 100%;
+        overflow: hidden;
+    }
+}
+
+.drag-win-fixed {
+    position: fixed;
+    border-radius: 12px;
+
+    .drag-line-common {
+        &:hover,
+        &.resize {
+            &::before {
+                background-color: transparent;
+            }
+        }
+    }
+
+    &.no-float {
+        position: relative;
+        float: right;
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+
+        .vditor-dom {
+            border: none;
+            border-radius: 0;
+        }
+
+        .drag-line-common {
+            &:hover,
+            &.resize {
+                &::before {
+                    background-color: #000;
+                }
+            }
+        }
+    }
+
+    .vditor-dom {
+        border: 1px solid var(--color-chat-box-border);
+        border-radius: 12px;
+    }
+}
+
+.drag-line-common {
+    position: absolute;
+    z-index: 1;
+
+    &::before {
+        content: "";
+        background-color: var(--color-border);
+    }
+
+    &:hover,
+    &.resize {
+        &::before {
+            background-color: #7287bf;
+        }
+    }
+}
+
+.drag-line-common.no-bg {
+    &::before {
+        content: "";
+        background-color: transparent;
+    }
+}
+
+.drag-angle-left-top {
+    top: 0;
+    left: 0;
+    border-top: 2px solid transparent;
+    border-left: 2px solid transparent;
+    border-top-left-radius: 12px;
+    cursor: nwse-resize;
+}
+
+.drag-angle-left-bottom {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid transparent;
+    border-left: 2px solid transparent;
+    border-bottom-left-radius: 12px;
+    cursor: nesw-resize;
+}
+
+.drag-angle-right-top {
+    top: 0;
+    right: 0;
+    border-top: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-top-right-radius: 12px;
+    cursor: nesw-resize;
+}
+
+.drag-angle-right-bottom {
+    bottom: 0;
+    right: 0;
+    border-bottom: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-bottom-right-radius: 12px;
+    cursor: nwse-resize;
+}
+
+.drag-angle {
+    position: absolute;
+    z-index: 2;
+    width: 12px;
+    height: 12px;
+    //&.resize, &:hover {
+    //  border-color: #7287bf;
+    //}
+}
+
+.drag-right {
+    .drag-line {
+        width: 16px;
+        top: 0;
+        bottom: 0;
+        right: -8px;
+        cursor: col-resize;
+        display: flex;
+        justify-content: center;
+
+        &::before {
+            width: 2px;
+            height: 100%;
+        }
+    }
+}
+.drag-left {
+    .drag-line {
+        width: 16px;
+        top: 0;
+        bottom: 0;
+        left: -8px;
+        cursor: col-resize;
+        display: flex;
+        justify-content: center;
+
+        &::before {
+            width: 2px;
+            height: 100%;
+        }
+    }
+}
+
+.drag-bottom {
+    width: 100% !important;
+    padding-bottom: 8px;
+
+    .drag-line {
+        height: 16px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        cursor: row-resize;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        &::before {
+            width: 100%;
+            height: 2px;
+        }
+    }
+}
+
+.drag-line-right {
+    width: 16px;
+    top: 0;
+    bottom: 0;
+    right: -8px;
+    cursor: col-resize;
+    display: flex;
+    justify-content: center;
+
+    &::before {
+        width: 2px;
+        height: 100%;
+    }
+
+    &.drag-line-left {
+        left: -8px;
+        right: inherit;
+    }
+}
+
+.drag-line-bottom {
+    height: 16px;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    cursor: row-resize;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    &::before {
+        width: 100%;
+        height: 2px;
+    }
+
+    &.drag-line-top {
+        top: -8px;
+        bottom: inherit;
+    }
+}
+
+.drag-block {
+    position: relative;
+    box-sizing: content-box;
+    z-index: 2;
+    top: 1px;
+    left: 1px;
+}
+
+//.drag-one {
+//  background-color: rgba(255, 0, 0, 0.5);
+//}
+//
+//.drag-two {
+//  background-color: rgba(255, 233, 0, 0.5);
+//}
+//
+//.drag-three {
+//  background-color: rgba(255, 0, 233, 0.5);
+//}
+//
+//.drag-four {
+//  background-color: rgba(222, 111, 0, 0.5);
+//}
+
+.drag-cross {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.drag-win-fixed {
+    .drag-line-right {
+        top: 12px;
+        bottom: 12px;
+    }
+
+    .drag-line-bottom {
+        left: 12px;
+        right: 12px;
+    }
+}
+
+.mind-right-btn {
+    z-index: 2;
+    position: absolute;
+    top: 10px;
+    left: calc(100% - 45px);
+    border: 1px solid #eaecef;
+    padding: 5px 6px;
+}
+
+.drag-cross.direction-column {
+    flex-direction: column;
+}
+
+.document-drag-right .drag-line-right {
+    top: 0;
+    bottom: 0;
+}

@@ -1,0 +1,41 @@
+body, html, #app {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;   
+}
+* {
+    box-sizing: border-box;
+}
+
+
+.w-full {
+    width: 100%;
+}
+.h-full {
+    height: 100%;
+}
+
+.d-flex, .d-center {
+    display: flex;
+}
+.align-center {
+    align-items: center;
+}
+.d-center {
+    justify-content: center;
+    align-items: center;
+}
+
+input,textarea {
+    outline: none;
+    border: none;
+}
+
+.ml-1 {
+    margin-left: 0.8rem;
+}
+.mr-1 {
+    margin-right: 0.8rem;
+}
