@@ -1,6 +1,5 @@
 {
   "name": "@muerp/ui",
-  "private": true,
   "version": "1.0.0",
   "main": "dist/erp-ui.js",
   "type": "module",
