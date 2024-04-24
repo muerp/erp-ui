@@ -6,6 +6,10 @@
   "files": [
     "dist/*"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build --config vite-lib.config.ts && tsc --project tsconfig.lib.json",
