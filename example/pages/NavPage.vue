@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full d-flex nav-page">
-    <mu-dragable initWidth="200" class="nav-router">
+    <mu-dragable :initWidth="300" class="nav-router" :changeWidth="200" :minWidth="100">
       <el-scrollbar>
         <div class="nav-label">组件</div>
         <router-link v-for="nav in navs" :to="nav.href">
@@ -18,11 +18,19 @@
 const navs = [
   {
     title: "Input",
-    href: "/input",
+    href: "/",
   },
   {
     title: "Dragable",
     href: "/dragable",
+  },
+  {
+    title: "Identify",
+    href: "/identify",
+  },
+  {
+    title: "Tree",
+    href: "/tree",
   },
 ];
 </script>
@@ -45,7 +53,7 @@ const navs = [
     color: #666;
   }
 }
-.router-link-active {
+.router-link-exact-active {
     background-color: #e1e1e1;
 }
 .doc-inner {

@@ -11,7 +11,7 @@ const routes = [
         children: [
             {
                 name: 'InputPage',
-                path: '/input',
+                path: '',
                 meta: {
                     title: '输入框组件',
                 },
@@ -24,6 +24,22 @@ const routes = [
                     title: '输入框组件',
                 },
                 component: () => import('../pages/DragablePage.vue'),
+            },
+            {
+                name: 'IdentifyPage',
+                path: '/identify',
+                meta: {
+                    title: '身份认证',
+                },
+                component: () => import('../pages/IdentifyPage.vue'),
+            },
+            {
+                name: 'TreePage',
+                path: '/tree',
+                meta: {
+                    title: '树结构',
+                },
+                component: () => import('../pages/TreePage.vue'),
             }
         ]
     }

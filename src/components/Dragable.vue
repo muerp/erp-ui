@@ -5,6 +5,7 @@
     :style="{
       display: showMode !== 2 ? 'block' : 'none',
       width: width + 'px',
+      height: height + 'px'
     }"
   >
     <slot />
@@ -19,12 +20,12 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
-import { DragDirection } from "../utils/constaints.ts";
+import { DragDirection } from "../utils/constaints";
 defineOptions({
   name: "mu-dragable",
 });
 const props = defineProps({
-  direction: { type: DragDirection, default: DragDirection.right },
+  direction: { type: String, default: DragDirection.right },
   minWidth: { type: Number, default: 8 },
   maxWidth: { type: Number, default: 0 },
   initWidth: { type: Number, default: 0 },
@@ -34,19 +35,25 @@ const props = defineProps({
   initHeight: { type: Number, default: 0 },
   showMode: { type: Number, default: 0 },
   dragEnabled: { type: Boolean, default: true },
+
+  changeWidth: { type: Number, default: 0 },
 });
 const resizeAble = ref(false);
 const content = ref<HTMLDivElement>();
-const width = ref(props.initWidth);
+const width = ref(props.direction===DragDirection.left||props.direction===DragDirection.right? props.initWidth:'inherit');
 function setWidthFlex(w: number) {
-  width.value = w;
+  if (props.changeWidth>0) {
+    width.value = w < props.changeWidth? props.minWidth:w;
+  } else {
+    width.value = w;
+  }
 }
-const height = ref(props.initHeight || "auto");
+const height = ref(props.direction===DragDirection.top||props.direction===DragDirection.bottom? props.initHeight:'inherit');
 function setHeightFlex(w: number) {
-  width.value = w;
+  height.value = w;
 }
 onBeforeMount(() => {
-  width.value = props.initWidth;
+  setWidthFlex(props.initWidth);
 });
 
 let clientX = 0,
@@ -69,10 +76,9 @@ function onMouseMove(e: MouseEvent) {
   if (!resizeAble.value || !content.value) return;
   e.preventDefault();
   if (props.direction === DragDirection.right) {
-
+    let sW = tempWidth + e.clientX - clientX;
     let minWidth = props.minWidth;
     let maxWidth = props.maxWidth;
-    let sW = tempWidth + e.clientX - clientX;
     if (sW < minWidth) {
       setWidthFlex(minWidth);
       return;
@@ -82,7 +88,6 @@ function onMouseMove(e: MouseEvent) {
       sW = maxWidth && sW > maxWidth ? maxWidth : sW;
       setWidthFlex(sW);
     }
-    // this.clientX = e.clientX;
   } else if (props.direction === DragDirection.left) {
     let sW = tempWidth + clientX - e.clientX;
     let minWidth = props.minWidth;
@@ -97,21 +102,31 @@ function onMouseMove(e: MouseEvent) {
       setWidthFlex(sW);
     }
   } else if (props.direction === DragDirection.top) {
+    let sH = tempHeight + clientY - e.clientY;
     let minHeight = props.minHeight;
-    if (e.clientY < content.value.getBoundingClientRect().top + minHeight) {
-      content.value.style.height = minHeight - 8 + "px";
-      clientY = e.clientY;
+    let maxHeight = props.maxHeight;
+    if (minHeight && sH < minHeight) {
+      setHeightFlex(minHeight);
       return;
     }
-    let maxHeight = props.maxHeight;
-    let mH = content.value.offsetHeight;
-    let sH = mH + parseInt((e.clientY - clientY).toString());
-    sH = sH < minHeight ? minHeight : sH;
-    if (maxHeight) {
-      sH = sH > maxHeight ? maxHeight : sH;
+    if (e.clientY !== clientY) {
+      sH = minHeight && sH < minHeight ? minHeight : sH;
+      sH = maxHeight && sH > maxHeight ? maxHeight : sH;
+      setHeightFlex(sH);
     }
-    content.value.style.height = sH + "px";
-    clientY = e.clientY;
+  } else if (props.direction === DragDirection.bottom) {
+    let sH = tempHeight + e.clientY - clientY;
+    let minHeight = props.minHeight;
+    let maxHeight = props.maxHeight;
+    if (minHeight && sH < minHeight) {
+      setHeightFlex(minHeight);
+      return;
+    }
+    if (e.clientY !== clientY) {
+      sH = minHeight && sH < minHeight ? minHeight : sH;
+      sH = maxHeight && sH > maxHeight ? maxHeight : sH;
+      setHeightFlex(sH);
+    }
   }
 }
 function onMouseUp() {

@@ -9,7 +9,8 @@ export default defineConfig({
     sourcemap: false,
     lib: {
       entry: path.resolve(__dirname, './src/index.ts'),
-      name: 'erp-ui'
+      name: 'ui',
+      fileName: 'ui'
     },
     cssCodeSplit: true,
     cssMinify: true,

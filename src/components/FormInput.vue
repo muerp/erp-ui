@@ -38,9 +38,9 @@
 <script lang="ts" setup>
 import { ref, watch, onMounted } from "vue";
 const focus = ref(false);
-const emit = defineEmits(["update:modelValue", "update:errorText"]);
+const emit = defineEmits(["update:modelValue", "update:errorText", 'change']);
 const shake = ref(false);
-const inputValue = ref('');
+const inputValue = ref("");
 defineOptions({
   name: "mu-form-input",
 });
@@ -56,13 +56,16 @@ const props = defineProps({
 });
 onMounted(() => {
   shake.value = !!props.errorText;
-  inputValue.value = props.modelValue || ''
+  inputValue.value = props.modelValue || "";
 });
-watch(()=>props.modelValue, (val) => {
-  if (inputValue.value !== val) {
-    inputValue.value = val;
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (inputValue.value !== val) {
+      inputValue.value = val;
+    }
   }
-})
+);
 watch(
   () => props.errorText,
   () => {
