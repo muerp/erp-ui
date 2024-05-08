@@ -1,10 +1,11 @@
 import './assets/css/root.scss'
 import * as components from "./components";
-export * from './components/useDraggable';
+export * from './utils/useDraggable';
+
 export default {
   install: (app: any) => {
     for (const key in components) {
-      const componentConfig = components[key];
+      const componentConfig = (components as any)[key];
       app.component(componentConfig.name, componentConfig);
     }
   },

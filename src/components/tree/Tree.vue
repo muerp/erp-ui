@@ -22,8 +22,8 @@
             </div>
           </div>
         </template>
-        <template #drag-icon>
-          <slot name="drag-icon"></slot>
+        <template #drag-icon="{ data, level }">
+          <slot name="drag-icon" :data="data" :level="level"></slot>
         </template>
       </tree-node>
     </div>
@@ -51,7 +51,7 @@ defineOptions({
 });
 import TreeNode from "./TreeNode.vue";
 const props = defineProps({
-  list: { type: Array, default: [] },
+  list: { type: Array<any>, default: [] },
   indent: { type: Number, default: 20 },
   modalvalue: { type: Object, default: undefined },
   disabledCenter: {type: Object, default: false},
@@ -61,11 +61,11 @@ defineComponent({
     TreeNode,
   },
 });
-const emit = defineEmits(["update:modalvalue", "node-move"]);
+const emit = defineEmits(["update:modalvalue", "node-move", 'double-item']);
 const activeItem = ref();
 const dragItem = ref();
 const dragPos = ref();
-const refList = ref({});
+const refList = ref<any>({});
 provide("refList", refList);
 onMounted(() => {
   activeItem.value = props.list[0];
@@ -88,27 +88,27 @@ watch(
     emit("update:modalvalue", val);
   }
 );
-const onClick = (item) => {
+const onClick = (item: any) => {
   item.expand = !item.expand;
   item.active = true;
   activeItem.value = item;
 };
-const onDouble = (item) => {
+const onDouble = (item: any) => {
   emit("double-item", item);
 };
-const onDragStart = ({ target }) => {
+const onDragStart = ({ target }: any) => {
   dragItem.value = target;
 };
 const curEnterItem = ref();
 watch(
   () => curEnterItem.value,
-  (val, old) => {
+  (_, old) => {
     if (old) {
       old.enterType = "";
     }
   }
 );
-const onDragMove = ({ target, offsetX, offsetY, index }) => {
+const onDragMove = ({ offsetX, offsetY, index }: any) => {
   if (!dragItem.value) return;
   dragPos.value = {
     x: offsetX,
@@ -155,15 +155,15 @@ const onDragMove = ({ target, offsetX, offsetY, index }) => {
     }
   }
 };
-const onDragEnd = (e) => {
+const onDragEnd = (e: any) => {
   if (dragItem.value && curEnterItem.value) {
     //移动
     emit("node-move", {
       item: dragItem.value,
       parent: curEnterItem.value,
       position: curEnterItem.value.enterType,
-      sourceIndex: e.index,
-      targetIndex: curEnterItem.value.targetIndex
+      sourceIndex: parseInt(e.index),
+      targetIndex: parseInt(curEnterItem.value.targetIndex)
     });
     activeItem.value = dragItem.value;
   }

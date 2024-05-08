@@ -1,6 +1,6 @@
 {
   "name": "@muerp/ui",
-  "version": "1.0.11",
+  "version": "1.0.14",
   "main": "dist/ui.js",
   "type": "module",
   "files": [
@@ -17,7 +17,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "element-plus": "^2.7.1",
+    "element-plus": "^2.7.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
   },

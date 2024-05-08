@@ -22,7 +22,7 @@
 import { onBeforeMount, ref } from "vue";
 import { DragDirection } from "../utils/constaints";
 defineOptions({
-  name: "mu-dragable",
+  name: "MuDragable",
 });
 const props = defineProps({
   direction: { type: String, default: DragDirection.right },

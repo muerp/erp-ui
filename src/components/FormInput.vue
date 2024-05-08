@@ -42,7 +42,7 @@ const emit = defineEmits(["update:modelValue", "update:errorText", 'change']);
 const shake = ref(false);
 const inputValue = ref("");
 defineOptions({
-  name: "mu-form-input",
+  name: "MuFormInput",
 });
 const props = defineProps({
   label: { type: String, default: "" },
@@ -79,7 +79,7 @@ watch(shake, (val) => {
     }, 600);
   }
 });
-const onChange = (e) => {
+const onChange = (e: any) => {
   emit("update:modelValue", e.target.value);
   emit("change", e);
   emit("update:errorText", "");

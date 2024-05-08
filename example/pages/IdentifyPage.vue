@@ -9,6 +9,11 @@
     <el-row class="mb-2">
       <mu-identify identify-code="您好"></mu-identify>
     </el-row>
+    <mu-color-picker placement="left">
+      <div>
+      dss
+      </div>
+    </mu-color-picker>
   </div>
 </template>
 <script lang="ts" setup>

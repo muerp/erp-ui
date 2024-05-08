@@ -73,7 +73,8 @@ function randomNum(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 function render() {
-  var ctx = canvas.value.getContext("2d");
+  const ctx = canvas.value?.getContext("2d");
+  if (!ctx) return;
   ctx.textBaseline = "bottom";
   // 绘制背景
   ctx.fillStyle = randomColor(props.backgroundColorMin, props.backgroundColorMax);

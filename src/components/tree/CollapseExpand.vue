@@ -5,7 +5,9 @@
 </template>
 <script lang="ts" setup>
 import { nextTick, onMounted, ref, watch } from "vue";
-
+defineOptions({
+  name: 'MuCollapseExpand'
+})
 const props = defineProps({
   expand: { type: Boolean, default: false },
 });
@@ -42,7 +44,7 @@ watch(
   }
 );
 onMounted(() => {
-  if (active.avlue) {
+  if (active.value) {
     expandRef.value.style.maxHeight = "inherit";
     expandRef.value.style.overflow = "hidden";
   }

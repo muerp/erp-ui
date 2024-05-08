@@ -12,7 +12,7 @@
       :ref="onRef"
     >
       <div ref="dragRef" v-if="!noDrag" class="mu-tree-left-icon">
-        <slot name="drag-icon"></slot>
+        <slot name="drag-icon" :data="data" :level="level"></slot>
       </div>
       <slot :data="data" :level="level" :index="index"></slot>
     </div>
@@ -36,11 +36,11 @@
           @drag-move="onDragMove"
           @drag-end="onDragEnd"
         >
-          <template #default="{ data, level, index}">
+          <template #default="{ data, level, index}: any">
             <slot :data="data" :level="level" :index="index"></slot>
           </template>
-          <template #drag-icon>
-            <slot name="drag-icon"></slot>
+          <template #drag-icon="{ data, level}: any">
+            <slot name="drag-icon" :data="data" :level="level"></slot>
           </template>
         </tree-node>
       </div>
@@ -51,15 +51,17 @@
 // import { useDraggable } from "element-plus";
 import {
   defineComponent,
-  onMounted,
-  ref,
   defineEmits,
   inject,
   onUnmounted,
   watch,
 } from "vue";
 import CollapseExpand from "./CollapseExpand.vue";
-import { useDraggable } from "./useDraggable";
+import { useDraggable } from "../../utils/useDraggable";
+
+defineOptions({
+  name: 'MuTreeNode'
+})
 const props = defineProps({
   data: { type: Object, default: undefined },
   index: { type: String, default: "" },
@@ -74,7 +76,7 @@ defineComponent({
 onUnmounted(() => {
   delete refList.value[props.index];
 });
-const refList = inject("refList");
+const refList = inject<any>("refList");
 watch(
   () => props.index,
   (val, old) => {
@@ -87,7 +89,7 @@ watch(
   }
 );
 
-const onRef = (el) => {
+const onRef = (el: any) => {
   if (!props.noDrag) {
     refList.value[props.index] = {
       el,
@@ -100,15 +102,15 @@ const emit = defineEmits(["drag-start", "drag-move", "drag-end"]);
 const dragRef = useDraggable((key: string, data: any) => {
   data.index = props.index;
   data.target = props.data;
-  emit(key, data);
+  emit(key as any, data);
 });
-const onDragStart = (e) => {
+const onDragStart = (e: MouseEvent) => {
   emit("drag-start", e);
 };
-const onDragMove = (e) => {
+const onDragMove = (e: MouseEvent) => {
   emit("drag-move", e);
 };
-const onDragEnd = (e) => {
+const onDragEnd = (e: MouseEvent) => {
   emit("drag-end", e);
 };
 </script>
@@ -161,3 +163,4 @@ const onDragEnd = (e) => {
   line-height: 0;
 }
 </style>
+../useDraggable
