@@ -5,3 +5,5 @@ export { default as Tree } from './tree/Tree.vue';
 export { default as TreeNode } from './tree/TreeNode.vue';
 export { default as CollapseExpand } from './tree/CollapseExpand.vue';
 export { default as ColorPicker } from './color-picker/color-picker.vue';
+
+export { default as MuLatterAnimation } from './animation/LatterAnimation.vue';

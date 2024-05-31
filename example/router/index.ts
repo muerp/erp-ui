@@ -40,6 +40,14 @@ const routes = [
                     title: '树结构',
                 },
                 component: () => import('../pages/TreePage.vue'),
+            },
+            {
+                name: 'AnimationPage',
+                path: '/animation',
+                meta: {
+                    title: '动画',
+                },
+                component: () => import('../pages/AnimationPage.vue'),
             }
         ]
     }

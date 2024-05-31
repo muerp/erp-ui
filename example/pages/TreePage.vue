@@ -1,6 +1,6 @@
 <template>
   <div class="page w-full h-full">
-    <mu-tree :list="list" @node-move="onMove" :disabled-center="true">
+    <mu-tree :list="list" class-name="tree-test" @node-move="onMove" :disabled-center="true">
       <template #default="{ data }">
         <svg-icon
           v-if="data.children && data.children.length > 0"

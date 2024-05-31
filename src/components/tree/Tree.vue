@@ -1,33 +1,31 @@
 <template>
-  <el-scrollbar>
-    <div class="mu-tree" :class="{ 'is-dragable': !!dragItem }">
-      <tree-node
-        v-for="(item, idx) in list"
-        :data="item"
-        :key="item.id"
-        :index="idx + ''"
-        @drag-start="onDragStart"
-        @drag-move="onDragMove"
-        @drag-end="onDragEnd"
-      >
-        <template #default="{ data, level, index }">
-          <div
-            class="tree-inner"
-            :style="{ 'padding-left': indent * level + 'px' }"
-            @click="onClick(data)"
-            @dblclick="onDouble(data)"
-          >
-            <div class="tree-content d-flex h-full flex-1 align-center">
-              <slot :data="data" :level="level" :index="index"></slot>
-            </div>
+  <div class="mu-tree" :class="[className, { 'is-dragable': !!dragItem }]">
+    <tree-node
+      v-for="(item, idx) in list"
+      :data="item"
+      :key="item.id"
+      :index="idx + ''"
+      @drag-start="onDragStart"
+      @drag-move="onDragMove"
+      @drag-end="onDragEnd"
+    >
+      <template #default="{ data, level, index }">
+        <div
+          class="tree-inner"
+          :style="{ 'padding-left': indent * level + 'px' }"
+          @click="onClick(data)"
+          @dblclick="onDouble(data)"
+        >
+          <div class="tree-content d-flex h-full flex-1 align-center">
+            <slot :data="data" :level="level" :index="index"></slot>
           </div>
-        </template>
-        <template #drag-icon="{ data, level }">
-          <slot name="drag-icon" :data="data" :level="level"></slot>
-        </template>
-      </tree-node>
-    </div>
-  </el-scrollbar>
+        </div>
+      </template>
+      <template #drag-icon="{ data, level }">
+        <slot name="drag-icon" :data="data" :level="level"></slot>
+      </template>
+    </tree-node>
+  </div>
   <div
     class="erp-drag-tree"
     v-if="dragItem && dragPos"
@@ -55,6 +53,7 @@ const props = defineProps({
   indent: { type: Number, default: 20 },
   modalvalue: { type: Object, default: undefined },
   disabledCenter: {type: Object, default: false},
+  className: {type: String, default: ''}
 });
 defineComponent({
   components: {

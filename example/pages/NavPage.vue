@@ -32,6 +32,10 @@ const navs = [
     title: "Tree",
     href: "/tree",
   },
+  {
+    title: "Animation",
+    href: "/animation",
+  },
 ];
 </script>
 <style lang="scss">

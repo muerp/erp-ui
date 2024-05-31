@@ -9,11 +9,15 @@
     <el-row class="mb-2">
       <mu-identify identify-code="您好"></mu-identify>
     </el-row>
-    <mu-color-picker placement="left">
-      <div>
-      dss
-      </div>
-    </mu-color-picker>
+    <el-dropdown placement="left-start" trigger="click" popper-class="color-drop">
+      <div class="d-flex align-center color-select">Test Dropdown</div>
+      <template #dropdown>
+        <mu-color-picker placement="left">
+          <div class="drop-label">COLORS</div>
+          <div>dss</div>
+        </mu-color-picker>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 <script lang="ts" setup>

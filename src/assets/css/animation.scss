@@ -1,0 +1,20 @@
+.mu-letter-content {
+    background-color: #000;
+    filter: contrast(30);
+}
+
+.mu-ani-letter-up {
+    animation: AniLetterShow 3s forwards;
+}
+
+@keyframes AniLetterShow {
+    from {
+        letter-spacing: var(--start-latter-spacing);
+        filter: var(--start-blur);
+    }
+
+    to {
+        letter-spacing: var(--end-latter-spacing);
+        filter: var(--end-blur);
+    }
+}
