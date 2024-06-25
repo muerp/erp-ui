@@ -52,16 +52,13 @@ const onMove = (data) => {
 }
 </script>
 <style lang="scss">
-html, body {
-    background-color: #1f1f1f;
-}
 .drag-p {
   width: 20px;
   height: 20px;
   background: red;
 }
 .mu-tree {
-    color: #fff;
+    color: #000;
     * {
         user-select: none;
     }

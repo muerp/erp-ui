@@ -1,0 +1,119 @@
+
+.mu-charging-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 32px;
+    z-index: 99;
+    width: 176px;
+    height: 176px;
+    font-size: 32px;
+    left: 62px;
+    color: #fff;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  .charging-circle {
+    position: relative;
+    box-sizing: border-box;
+    width: 300px;
+    height: 300px;
+    filter: blur(8px);
+  
+    &::after {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      content: "";
+      background-color: #00ff6f;
+      border-radius: 42% 38% 62% 49% / 45%;
+      transform: translate(-50%, -50%) rotate(0);
+      animation: rotate 10s infinite linear;
+    }
+  
+    &::before {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      z-index: 99;
+      width: 176px;
+      height: 176px;
+      content: "";
+      background-color: #000;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+  .charging-bubbles {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 100px;
+    height: 40px;
+    background-color: #00ff6f;
+    filter: blur(5px);
+    border-radius: 100px 100px 0 0;
+    transform: translate(-50%, 0);
+  }
+  .mu-charging {
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    background-color: #000;
+    position: relative;
+    filter: contrast(15) hue-rotate(0);
+    animation: hueRotate 10s infinite linear;
+    li {
+      position: absolute;
+      background: #00ff6f;
+      border-radius: 50%;
+    }
+  
+    @for $i from 0 through 15 {
+      li:nth-child(#{$i}) {
+        $width: 15 + random(15) + px;
+        top: 50%;
+        left: 15 + random(70) + px;
+        width: $width;
+        height: $width;
+        transform: translate(-50%, -50%);
+        animation: moveToTop
+          #{random(6) +
+          3}s
+          ease-in-out -#{random(5000) /
+          1000}s
+          infinite;
+      }
+    }
+  
+    @keyframes rotate {
+      50% {
+        border-radius: 45% / 42% 38% 58% 49%;
+      }
+  
+      100% {
+        transform: translate(-50%, -50%) rotate(720deg);
+      }
+    }
+  
+    @keyframes moveToTop {
+      90% {
+        opacity: 1;
+      }
+  
+      100% {
+        opacity: 0.1;
+        transform: translate(-50%, -180px);
+      }
+    }
+  
+    @keyframes hueRotate {
+      100% {
+        filter: contrast(15) hue-rotate(360deg);
+      }
+    }
+  }

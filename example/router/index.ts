@@ -48,6 +48,22 @@ const routes = [
                     title: '动画',
                 },
                 component: () => import('../pages/AnimationPage.vue'),
+            },
+            {
+                name: 'ChargingPage',
+                path: '/charging',
+                meta: {
+                    title: '充电效果',
+                },
+                component: () => import('../pages/ChargingPage.vue'),
+            },
+            {
+                name: 'CardPage',
+                path: '/card',
+                meta: {
+                    title: '卡片',
+                },
+                component: () => import('../pages/CardPage.vue'),
             }
         ]
     }

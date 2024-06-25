@@ -1,0 +1,69 @@
+.mu-flip-card {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    color: #000;
+    font-size: 64px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 16px;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        height: 1px;
+        width: 100%;
+        left: 0;
+        z-index: 20;
+        background-color: #000;
+
+    }
+}
+
+.flip-card {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background-color: #fff;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.flip-card1 {
+    line-height: 100px;
+    background-color: #fff;
+}
+
+.flip-card2 {
+    top: 50%;
+    line-height: 0;
+    transform: rotateX(180deg);
+    transform-origin: center top;
+    backface-visibility: hidden;
+    z-index: 10;
+    background-color: #fff;
+}
+
+.mu-flip-card:hover .flip-card2 {
+    transform: rotateX(0);
+}
+
+.flip-card3 {
+    line-height: 100px;
+    transition: .5s;
+    background-color: #ffffff;
+    transform-origin: center bottom;
+    backface-visibility: hidden;
+}
+
+.mu-flip-card:hover .flip-card3 {
+    transform: rotateX(-180deg);
+}
+
+.flip-card4 {
+    top: 50%;
+    line-height: 0;
+}

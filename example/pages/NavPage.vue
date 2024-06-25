@@ -33,8 +33,16 @@ const navs = [
     href: "/tree",
   },
   {
-    title: "Animation",
+    title: "TextAnimation",
     href: "/animation",
+  },
+  {
+    title: "Charging",
+    href: "/charging",
+  },
+   {
+    title: "Card",
+    href: "/card",
   },
 ];
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page w-full h-full d-center">
+  <div class="page w-full h-full d-center black-page">
     <mu-latter-animation
       :startLatterSpacing="-50"
       :endLatterSpacing="0"
@@ -16,8 +16,10 @@ import { ref } from "vue";
 <style lang="scss">
 html,
 body {
-  background-color: #1f1f1f;
   color: #fff;
+}
+.black-page {
+    background: #000;
 }
 .mu-ani-letter-up {
   font-size: 100px;
