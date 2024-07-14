@@ -38,7 +38,7 @@ export const useAlphaSlider = (props: AlphaSliderProps) => {
       left = Math.max(thumb.value.offsetWidth / 2, left)
       left = Math.min(left, rect.width - thumb.value.offsetWidth / 2)
 
-      props.color.set(
+      props.color?.set(
         'alpha',
         Math.round(
           ((left - thumb.value.offsetWidth / 2) /
@@ -92,7 +92,7 @@ export const useAlphaSliderDOM = (
 
     if (props.vertical) return 0
     const el = instance.vnode.el
-    const alpha = props.color.get('alpha')
+    const alpha = props.color?.get('alpha')
 
     if (!el) return 0
     return Math.round(
@@ -145,11 +145,11 @@ export const useAlphaSliderDOM = (
   })
 
   watch(
-    () => props.color.get('alpha'),
+    () => props.color?.get('alpha'),
     () => update()
   )
   watch(
-    () => props.color.value,
+    () => props.color?.value,
     () => update()
   )
 

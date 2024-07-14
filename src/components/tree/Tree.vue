@@ -5,24 +5,18 @@
       :data="item"
       :key="item.id"
       :index="idx + ''"
+      :indent="indent"
       @drag-start="onDragStart"
       @drag-move="onDragMove"
       @drag-end="onDragEnd"
+      @click="onClick"
+      @dblclick="onDouble"
     >
       <template #default="{ data, level, index }">
-        <div
-          class="tree-inner"
-          :style="{ 'padding-left': indent * level + 'px' }"
-          @click="onClick(data)"
-          @dblclick="onDouble(data)"
-        >
-          <div class="tree-content d-flex h-full flex-1 align-center">
-            <slot :data="data" :level="level" :index="index"></slot>
-          </div>
-        </div>
+        <slot :data="data" :level="level" :index="index"></slot>
       </template>
-      <template #drag-icon="{ data, level }">
-        <slot name="drag-icon" :data="data" :level="level"></slot>
+      <template #content="{ data, level, index }">
+        <slot name="content" :data="data" :level="level" :index="index"></slot>
       </template>
     </tree-node>
   </div>
@@ -31,13 +25,9 @@
     v-if="dragItem && dragPos"
     :style="{ left: dragPos.x + 20 + 'px', top: dragPos.y + 'px' }"
   >
-    <tree-node :data="dragItem" index="0" :no-drag="true">
-      <template #default="{ data, level }">
-        <div class="tree-inner" :style="{ 'padding-left': indent * level + 'px' }">
-          <div class="tree-content d-flex h-full flex-1 align-center">
-            <slot :data="data" :level></slot>
-          </div>
-        </div>
+    <tree-node :data="dragItem" index="0" :no-drag="true" :indent="indent">
+      <template #content="{ data, level, index }">
+        <slot :data="data" :level :index="index"></slot>
       </template>
     </tree-node>
   </div>
@@ -52,7 +42,7 @@ const props = defineProps({
   list: { type: Array<any>, default: [] },
   indent: { type: Number, default: 20 },
   modalvalue: { type: Object, default: undefined },
-  disabledCenter: {type: Object, default: false},
+  disabledCenter: {type: Boolean, default: false},
   className: {type: String, default: ''}
 });
 defineComponent({
@@ -60,11 +50,12 @@ defineComponent({
     TreeNode,
   },
 });
-const emit = defineEmits(["update:modalvalue", "node-move", 'double-item']);
+const emit = defineEmits(["update:modalvalue", "node-move", 'double-item', 'update:list']);
 const activeItem = ref();
 const dragItem = ref();
 const dragPos = ref();
 const refList = ref<any>({});
+const timer = ref()
 provide("refList", refList);
 onMounted(() => {
   activeItem.value = props.list[0];
@@ -87,12 +78,12 @@ watch(
     emit("update:modalvalue", val);
   }
 );
-const onClick = (item: any) => {
+const onClick = (_:any, item: any) => {
   item.expand = !item.expand;
   item.active = true;
   activeItem.value = item;
 };
-const onDouble = (item: any) => {
+const onDouble = (_:any, item: any) => {
   emit("double-item", item);
 };
 const onDragStart = ({ target }: any) => {
@@ -154,22 +145,79 @@ const onDragMove = ({ offsetX, offsetY, index }: any) => {
     }
   }
 };
+const findNode = (path: number[]) => {
+  if (path.length === 0) return undefined;
+  let list = props.list;
+  let node: any;
+  for (let i=0; i<path.length; ++i) {
+    node = list[path[i]];
+    if (node) {
+      list = node.children;
+    } else {
+      return undefined;
+    }
+  }
+  return node;
+}
+const equalsPath = (path: number[], another: number[]) => {
+  return (
+    path.length === another.length && path.every((n, i) => n === another[i])
+  )
+}
 const onDragEnd = (e: any) => {
+  clearTimeout(timer.value)
+  timer.value = undefined;
   if (dragItem.value && curEnterItem.value) {
     //移动
+    const sourcePath = e.index.split('-').map((n: string) => ~~n);
+    const targetPath = curEnterItem.value.targetIndex.split('-').map((n: string) => ~~n);
+    const position = curEnterItem.value.enterType;
+    const item = dragItem.value;
+    const parent = curEnterItem.value
     emit("node-move", {
-      item: dragItem.value,
-      parent: curEnterItem.value,
-      position: curEnterItem.value.enterType,
-      sourceIndex: parseInt(e.index),
-      targetIndex: parseInt(curEnterItem.value.targetIndex)
+      item,
+      parent,
+      position,
+      sourcePath,
+      targetPath,
     });
     activeItem.value = dragItem.value;
+
+    const list = [...props.list];
+
+    const sourceIdx = sourcePath[sourcePath.length - 1];
+    let targetIdx = targetPath[targetPath.length - 1];
+    const itemParent = findNode(sourcePath.slice(0, -1));
+    const itemList = itemParent? itemParent.children: list;
+    const parentNode = findNode(targetPath.slice(0, -1));
+    const parentList = parentNode? parentNode.children: list;
+
+    itemList.splice(sourceIdx, 1);
+    if (position==='center') {
+        parent.expand = true;
+        if (!parent.children) {
+          parent.children = [];
+        }
+        parent.children.push(item);
+    }  else if (equalsPath(sourcePath.slice(0, -1), targetPath.slice(0, -1))) {
+      if (targetIdx > sourceIdx) {
+        targetIdx -= 1;
+      }
+      const insertIdx = targetIdx + (position === 'top' ? 0 : 1);
+      itemList.splice(insertIdx, 0, item)
+    } else {
+      parentList.splice(targetIdx + (position === 'top' ? 0 : 1) , 0, item);
+    }
+    console.log(list)
+    emit('update:list', list)
   }
   dragItem.value = undefined;
   curEnterItem.value = undefined;
   dragPos.value = undefined;
 };
+defineExpose({
+  findNode,
+})
 </script>
 <style lang="scss">
 .mu-tree {
@@ -177,13 +225,16 @@ const onDragEnd = (e: any) => {
     user-select: none;
   }
 }
-.drag-icon {
-  transition: opacity all 0.25s;
-  opacity: 0;
-  cursor: move;
+.tree-item {
+  &:hover {
+    background-color: #f9f9f9;
+  }
+  &.active {
+    background-color: #f0f0f0;
+  }
 }
 .is-dragable {
-  .tree-item {
+  .tree-item:not(.active) {
     &:hover {
       background-color: transparent;
     }
@@ -192,17 +243,14 @@ const onDragEnd = (e: any) => {
 .erp-drag-tree {
   position: fixed;
   z-index: 99;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #fafafa;
   backdrop-filter: blur(10px);
   pointer-events: none;
-  .tree-item {
-    padding-left: 8px;
-  }
-  .tree-content {
-    padding: 6px;
-  }
+  border-radius: 4px;
+  border: 1px solid #ccc;
   .nav-icon {
     width: 16px;
   }
 }
+
 </style>

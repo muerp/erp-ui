@@ -16,7 +16,5 @@ html,
 body {
   color: #fff;
 }
-.black-page {
-  background: #000;
-}
+
 </style>

@@ -9,16 +9,20 @@
         'enter-top': data.enterType === 'top',
         'enter-bottom': data.enterType === 'bottom',
       }"
+      :style="{ 'padding-left': indent * level + 'px' }"
       :ref="onRef"
     >
-      <div ref="dragRef" v-if="!noDrag" class="mu-tree-left-icon">
-        <slot name="drag-icon" :data="data" :level="level"></slot>
+      <div class="tree-inner" @click="onClick" @dbclick="onDBClick">
+        <div ref="dragRef" v-if="!noDrag" class="mu-tree-darg">
+          <slot :data="data" :level="level" :index="index"></slot>
+        </div>
+        <slot name="content" :data="data" :level="level" :index="index"></slot>
       </div>
-      <slot :data="data" :level="level" :index="index"></slot>
     </div>
     <collapse-expand
       v-if="data.children && data.children.length > 0"
       :expand="data.expand"
+      :name="data.title"
     >
       <div
         v-loading="data.loading"
@@ -32,15 +36,18 @@
           :index="index + '-' + idx"
           :level="level + 1"
           :no-drag="noDrag"
+          :indent="indent"
           @drag-start="onDragStart"
           @drag-move="onDragMove"
           @drag-end="onDragEnd"
+          @click="onClick" 
+          @dbclick="onDBClick"
         >
-          <template #default="{ data, level, index}: any">
+          <template #default="{ data, level, index }: any">
             <slot :data="data" :level="level" :index="index"></slot>
           </template>
-          <template #drag-icon="{ data, level}: any">
-            <slot name="drag-icon" :data="data" :level="level"></slot>
+          <template #content="{ data, level, index }: any">
+            <slot name="content" :data="data" :level="level" :index="index"></slot>
           </template>
         </tree-node>
       </div>
@@ -48,24 +55,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-// import { useDraggable } from "element-plus";
-import {
-  defineComponent,
-  defineEmits,
-  inject,
-  onUnmounted,
-  watch,
-} from "vue";
+import { defineComponent, defineEmits, inject, onUnmounted, watch } from "vue";
 import CollapseExpand from "./CollapseExpand.vue";
 import { useDraggable } from "../../utils/useDraggable";
 
 defineOptions({
-  name: 'MuTreeNode'
-})
+  name: "MuTreeNode",
+});
 const props = defineProps({
   data: { type: Object, default: undefined },
   index: { type: String, default: "" },
   level: { type: Number, default: 0 },
+  indent: { type: Number, default: 0 },
   noDrag: { type: Boolean, default: false },
 });
 defineComponent({
@@ -98,7 +99,7 @@ const onRef = (el: any) => {
     };
   }
 };
-const emit = defineEmits(["drag-start", "drag-move", "drag-end"]);
+const emit = defineEmits(["drag-start", "drag-move", "drag-end", 'click', 'dbclick']);
 const dragRef = useDraggable((key: string, data: any) => {
   data.index = props.index;
   data.target = props.data;
@@ -113,6 +114,12 @@ const onDragMove = (e: MouseEvent) => {
 const onDragEnd = (e: MouseEvent) => {
   emit("drag-end", e);
 };
+const onClick = (e: MouseEvent, data?: any) => {
+  emit("click", e, data || props.data);
+}
+const onDBClick = (e: MouseEvent, data?: any) => {
+  emit("dbclick", e, data || props.data);
+}
 </script>
 <style lang="scss">
 .tree-item {
@@ -123,12 +130,6 @@ const onDragEnd = (e: MouseEvent) => {
   cursor: pointer;
   transition: all 0.25s;
   border-radius: 4px;
-  &:hover {
-    background-color: rgb(36, 36, 36);
-    .drag-icon {
-      opacity: 1;
-    }
-  }
 }
 .tree-inner {
   flex: 1;
@@ -138,23 +139,23 @@ const onDragEnd = (e: MouseEvent) => {
     user-select: none;
   }
 }
-.tree-content {
+.tree-inner {
   padding: 7px 3px;
   border-radius: 4px;
   border: 1px solid transparent;
 }
 .enter-center {
-  .tree-content {
+  .tree-inner {
     border: 1px dashed var(--mu-enter-color);
   }
 }
 .enter-top {
-  .tree-content {
+  .tree-inner {
     border-top-color: var(--mu-enter-color);
   }
 }
 .enter-bottom {
-  .tree-content {
+  .tree-inner {
     border-bottom-color: var(--mu-enter-color);
   }
 }
@@ -162,5 +163,7 @@ const onDragEnd = (e: MouseEvent) => {
   display: inline-block;
   line-height: 0;
 }
+.mu-tree-darg {
+  width: 100%;
+}
 </style>
-../useDraggable

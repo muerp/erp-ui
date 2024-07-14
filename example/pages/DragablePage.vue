@@ -25,11 +25,13 @@
 .drag-four {
   background-color: aliceblue;
   height: 100%;
+  color: #000;
 }
 .drag-two,
 .drag-three {
   background-color: aqua;
   height: 100%;
+  color: #000;
 }
 .drag-three,
 .drag-two {

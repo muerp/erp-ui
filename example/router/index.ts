@@ -1,77 +1,42 @@
-import {createRouter, createWebHistory} from 'vue-router'
-
-const routes = [
+import { createRouter, createWebHistory } from 'vue-router'
+const modules = import.meta.glob('../pages/**.vue')
+export const routes: any = [
     {
         name: 'NavPage',
         path: '/',
         meta: {
             title: '登陆',
         },
-        component: () => import('../pages/NavPage.vue'),
+        component: () => import('../NavPage.vue'),
         children: [
-            {
-                name: 'InputPage',
-                path: '',
-                meta: {
-                    title: '输入框组件',
-                },
-                component: () => import('../pages/InputPage.vue'),
-            },
-            {
-                name: 'DragablePage',
-                path: '/dragable',
-                meta: {
-                    title: '输入框组件',
-                },
-                component: () => import('../pages/DragablePage.vue'),
-            },
-            {
-                name: 'IdentifyPage',
-                path: '/identify',
-                meta: {
-                    title: '身份认证',
-                },
-                component: () => import('../pages/IdentifyPage.vue'),
-            },
-            {
-                name: 'TreePage',
-                path: '/tree',
-                meta: {
-                    title: '树结构',
-                },
-                component: () => import('../pages/TreePage.vue'),
-            },
-            {
-                name: 'AnimationPage',
-                path: '/animation',
-                meta: {
-                    title: '动画',
-                },
-                component: () => import('../pages/AnimationPage.vue'),
-            },
-            {
-                name: 'ChargingPage',
-                path: '/charging',
-                meta: {
-                    title: '充电效果',
-                },
-                component: () => import('../pages/ChargingPage.vue'),
-            },
-            {
-                name: 'CardPage',
-                path: '/card',
-                meta: {
-                    title: '卡片',
-                },
-                component: () => import('../pages/CardPage.vue'),
-            }
+            
         ]
     }
 ];
 
+
+const formatRoutes = () => {
+    for (let path in modules) {
+        const p = path.split('/');
+        const c = p[p.length - 1];
+        const t = c.replace('Page.vue', '').toLowerCase();
+        routes[0].children.push({
+            name: c.replace('.vue', ''),
+            path: t==='input'? '/':'/'+t,
+            meta: {
+                title: c.replace('Page.vue', ''),
+            },
+            component: modules[path],
+
+        })
+    }
+    
+    return routes;
+}
+
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes: formatRoutes()
 })
 
 router.beforeEach((to: any) => {

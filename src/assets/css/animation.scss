@@ -4,7 +4,7 @@
 }
 
 .mu-ani-letter-up {
-    animation: AniLetterShow 3s forwards;
+    animation: AniLetterShow var(--duration) forwards;
 }
 
 @keyframes AniLetterShow {

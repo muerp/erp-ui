@@ -3,52 +3,28 @@
     <mu-dragable :initWidth="300" class="nav-router" :changeWidth="200" :minWidth="100">
       <el-scrollbar>
         <div class="nav-label">组件</div>
-        <router-link v-for="nav in navs" :to="nav.href">
+        <router-link v-for="nav in navs" :to="nav.href" :key="nav.title">
           {{ nav.title }}
         </router-link>
       </el-scrollbar>
     </mu-dragable>
     <div class="doc-inner">
-        <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-const navs = [
-  {
-    title: "Input",
-    href: "/",
-  },
-  {
-    title: "Dragable",
-    href: "/dragable",
-  },
-  {
-    title: "Identify",
-    href: "/identify",
-  },
-  {
-    title: "Tree",
-    href: "/tree",
-  },
-  {
-    title: "TextAnimation",
-    href: "/animation",
-  },
-  {
-    title: "Charging",
-    href: "/charging",
-  },
-   {
-    title: "Card",
-    href: "/card",
-  },
-];
+import {routes} from './router'
+const  navs = routes[0].children.map((item: any) => ({
+  title: item.meta.title,
+  href: item.path
+}))
+console.log('--111-navs', navs)
 </script>
 <style lang="scss">
 .nav-router {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 .nav-page {
   a {
@@ -66,10 +42,10 @@ const navs = [
   }
 }
 .router-link-exact-active {
-    background-color: #e1e1e1;
+  background-color: #e1e1e1;
 }
 .doc-inner {
-    flex: 1;
-    padding: 16px;
+  flex: 1;
+  padding: 16px;
 }
 </style>

@@ -10,3 +10,4 @@ export { default as MuLatterAnimation } from './animation/LatterAnimation.vue';
 
 export { default as MuCharging } from './animation/Charging.vue';
 export { default as MuFlipCard } from './card/FlipCard.vue';
+export { default as MuSvgAnimation } from './animation/SvgAnimation.vue';
